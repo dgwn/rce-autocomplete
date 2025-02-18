@@ -11,7 +11,10 @@ class LLMService:
         self.openai = AsyncOpenAI(api_key=settings.OPENAI_API_KEY)
 
     def _sys_prompt(self, text):
-        return f"Please complete this html code: {text}"
+        return (
+            f"Please complete this html code and don't say anything else:"
+            f"{text}"
+        )
 
     async def complete_text(
         self,
@@ -23,7 +26,7 @@ class LLMService:
         model="gpt-4o-mini",
     ) -> CompletionResponse:
         if provider == "openai":
-            response = await self.complete_text_openai(
+            response = await self._complete_text_openai(
                 text=text,
                 max_tokens=max_tokens,
                 temperature=temperature,
@@ -34,7 +37,7 @@ class LLMService:
 
         return CompletionResponse(completed_text="", tokens_used=0)
 
-    async def complete_text_openai(
+    async def _complete_text_openai(
         self, text, max_tokens, temperature, stream, model
     ) -> CompletionResponse:
         if not stream:
