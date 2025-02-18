@@ -20,9 +20,10 @@ app.add_middleware(
 
 app.include_router(api_router, prefix=settings.API_STR)
 
+
 @app.get("/")
 async def root():
     return {
         "message": "Welcome to the RCE Autocomplete API",
-        "version": "1.0.0"
+        "version": "1.0.0",
     }
