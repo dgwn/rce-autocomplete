@@ -7,6 +7,7 @@ requires-python = ">=3.12"
 dependencies = [
     "black>=25.1.0",
     "fastapi[standard]>=0.115.8",
+    "google-api-python-client>=2.161.0",
     "openai>=1.63.2",
     "pydantic-settings>=2.7.1",
     "python-dotenv>=1.0.1",
