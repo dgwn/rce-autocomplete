@@ -39,7 +39,6 @@ def youtube(query: str):
     os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 
 
-    print("my yt key: ", os.getenv("YOUTUBE_API_KEY"))
     api_service_name = "youtube"
     api_version = "v3"
     DEVELOPER_KEY = os.getenv("YOUTUBE_API_KEY")
