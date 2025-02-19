@@ -9,6 +9,7 @@ dependencies = [
     "black>=25.1.0",
     "boto3>=1.36.23",
     "fastapi[standard]>=0.115.8",
+    "google-api-python-client>=2.161.0",
     "openai>=1.63.2",
     "pydantic-settings>=2.7.1",
     "python-dotenv>=1.0.1",

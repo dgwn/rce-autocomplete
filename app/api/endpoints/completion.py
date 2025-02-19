@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.schemas.completion import CompletionRequest, CompletionResponse
+from app.schemas.completion import DummyCompletionRequest, CompletionRequest, DummyCompletionResponse, CompletionResponse
 from app.services.llm import LLMService
 
 router = APIRouter()
@@ -21,3 +21,11 @@ async def complete_text(request: CompletionRequest):
     )
 
     return result
+
+@router.post("/dummy-complete", response_model=DummyCompletionResponse)
+async def dummy_complete(request: DummyCompletionRequest):
+    if not request.content_up_until_cursor.strip():
+        return DummyCompletionResponse(html="")
+    
+
+    return DummyCompletionResponse(suggestion="""<h1> Hello Danny G you silly billy </h1>""")

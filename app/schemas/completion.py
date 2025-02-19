@@ -20,8 +20,16 @@ class CompletionRequest(BaseModel):
         "gpt-4o-mini", description="The model to use for completion"
     )
 
+class DummyCompletionRequest(BaseModel):
+    content_up_until_cursor: str = Field(..., description="The text to be completed")
+    all_content_in_rce : str = Field(..., description="The text to be completed")
+
 
 # May have to edit
 class CompletionResponse(BaseModel):
     completed_text: str
     tokens_used: int
+
+
+class DummyCompletionResponse(BaseModel):
+    suggestion: str
