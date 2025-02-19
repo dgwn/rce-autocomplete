@@ -2,6 +2,7 @@ from openai import AsyncOpenAI
 from app.core.config import settings
 from dotenv import load_dotenv
 from app.schemas.completion import CompletionResponse
+from app.services.yt import youtube
 
 # import boto3
 from anthropic import AsyncAnthropicBedrock
@@ -9,6 +10,22 @@ import json
 
 load_dotenv()
 
+anthropic_tools = [
+    {
+        "name": "youtube",
+        "description": "Search for a youtube video",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "query": {
+                    "type": "string",
+                    "description": "The query to search for"
+                }
+            },
+            "required": ["query"]
+        }
+    }
+]
 
 class LLMService:
     def __init__(self):
@@ -16,7 +33,7 @@ class LLMService:
 
     def _sys_prompt(self, text):
         return (
-            f"Please complete this html code and don't say anything else:"
+            f"Please complete this html code and search for a yt video related to programming"
             f"{text}"
         )
 
@@ -26,10 +43,11 @@ class LLMService:
         max_tokens=100,
         temperature=0.8,
         stream=False,
-        provider="aws",
-        model="anthropic.claude-3-haiku-20240307-v1:0",
-        tools: dict = None,
+        provider="anthropic",
+        model="anthropic.claude-3-haiku-20240307-v1:0"
     ) -> CompletionResponse:
+        print("in complete_text")
+        print("provider: ", provider)
         if provider == "openai":
             response = await self._complete_text_openai(
                 text=text,
@@ -41,13 +59,13 @@ class LLMService:
             return response
         
         if provider == "anthropic":
+            print("in anthropic")
             response = await self._complete_text_anthropic_aws(
                 text=text,
                 max_tokens=max_tokens,
                 temperature=temperature,
                 stream=stream,
                 model=model,
-                tools=tools,
             )
             return response
 
@@ -71,14 +89,15 @@ class LLMService:
 
         return CompletionResponse(completed_text="", tokens_used=0)
     
-    async def _complete_text_anthropic_aws(self, text, max_tokens, temperature, stream, model, tools, tool_choice={"type": "auto"}) -> CompletionResponse:
+    async def _complete_text_anthropic_aws(self, text, max_tokens, temperature, stream, model, tools=anthropic_tools, tool_choice={"type": "any"}) -> CompletionResponse:
 
         client = AsyncAnthropicBedrock(
-            aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
-            aws_secret_access_key=settings.AWS_SECRET_KEY,
-            region_name=settings.AWS_REGION
+            aws_access_key=settings.AWS_ACCESS_KEY_ID,
+            aws_secret_key=settings.AWS_SECRET_KEY,
+            aws_region=settings.AWS_REGION
         )
         
+        print("tools: ", tools)
         if tools == []:
             response = await client.messages.create(
                 model=model,
@@ -98,6 +117,7 @@ class LLMService:
             )
             
             if response.stop_reason == "tool_use":
+                print("tool use")
                 last_content_block = response.content[-1]
                 if last_content_block.type == 'tool_use':
                     tool_name = last_content_block.name
@@ -105,5 +125,12 @@ class LLMService:
                     # tool_id = last_content_block.id
                     if tool_name == "youtube":
                         youtube_res = youtube(tool_inputs["text"])
+                        print(f"called youtube with {tool_inputs['text']}")
+                        return CompletionResponse(youtube_res, tokens_used=0)
+                    # TODO: process tool response better
+            else:
+                print("no tool use")
+            
+        return CompletionResponse("No response", tokens_used=0)
         
     

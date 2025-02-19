@@ -14,10 +14,10 @@ class CompletionRequest(BaseModel):
         False, description="Whether to stream the response"
     )
     provider: Optional[str] = Field(
-        "openai", description="The provider to use for completion"
+        "anthropic", description="The provider to use for completion"
     )
     model: Optional[str] = Field(
-        "gpt-4o-mini", description="The model to use for completion"
+        "anthropic.claude-3-sonnet-20240229-v1:0", description="The model to use for completion"
     )
 
 class DummyCompletionRequest(BaseModel):
