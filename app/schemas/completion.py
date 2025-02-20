@@ -17,7 +17,7 @@ class CompletionRequest(BaseModel):
         "anthropic", description="The provider to use for completion"
     )
     model: Optional[str] = Field(
-        "anthropic.claude-3-sonnet-20240229-v1:0", description="The model to use for completion"
+        "us.anthropic.claude-3-5-haiku-20241022-v1:0", description="The model to use for completion"
     )
 
 class DummyCompletionRequest(BaseModel):

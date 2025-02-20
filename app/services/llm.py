@@ -44,7 +44,7 @@ class LLMService:
         temperature=0.8,
         stream=False,
         provider="anthropic",
-        model="anthropic.claude-3-haiku-20240307-v1:0"
+        model="us.anthropic.claude-3-5-haiku-20241022-v1:0"
     ) -> CompletionResponse:
         print("in complete_text")
         print("provider: ", provider)
@@ -121,11 +121,11 @@ class LLMService:
                 last_content_block = response.content[-1]
                 if last_content_block.type == 'tool_use':
                     tool_name = last_content_block.name
-                    tool_inputs = last_content_block.inputs
+                    tool_inputs = last_content_block.input
                     # tool_id = last_content_block.id
                     if tool_name == "youtube":
-                        youtube_res = youtube(tool_inputs["text"])
-                        print(f"called youtube with {tool_inputs['text']}")
+                        youtube_res = youtube(tool_inputs["query"])
+                        print(f"called youtube with {tool_inputs['query']}")
                         return CompletionResponse(youtube_res, tokens_used=0)
                     # TODO: process tool response better
             else:
