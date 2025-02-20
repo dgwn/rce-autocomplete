@@ -3,7 +3,8 @@ from typing import Optional
 
 
 class CompletionRequest(BaseModel):
-    text: str = Field(..., description="The text to be completed")
+    content_up_until_cursor: str = Field(..., description="The text to be completed"),
+    all_content_in_rce : str = Field(..., description="The text to be completed"),
     max_tokens: Optional[int] = Field(
         100, description="Maximum tokens to generate"
     )
@@ -27,7 +28,7 @@ class DummyCompletionRequest(BaseModel):
 
 # May have to edit
 class CompletionResponse(BaseModel):
-    completed_text: str
+    suggestion: str
     tokens_used: int
 
 

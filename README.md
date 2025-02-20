@@ -39,3 +39,11 @@ YOUTUBE_API_KEY=
 Since there are a lot of optional parameters, there are many default values.
 
 Please store all default values in the completion.py schema for consistency
+
+## Example CURL request in:
+curl -X POST "http://127.0.0.1:8000/api/completion/complete" \
+     -H "Content-Type: application/json" \
+     -d '{
+           "content_up_until_cursor": "<p>This is a youtube video about phylogenetic trees</p>",
+           "all_content_in_rce": "<p>This is a youtube video about phylogenetic trees</p><p>This is a youtube video about phylogenetic trees</p>"
+         }'
