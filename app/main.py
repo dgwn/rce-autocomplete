@@ -15,6 +15,8 @@ app = FastAPI()
 origins = [
     "http://localhost",
     "http://localhost:8080",
+    "https://devhub.cdl.ucf.edu",
+    "https://canvas.dev.cdl.ucf.edu",
 ]
 
 app.add_middleware(
