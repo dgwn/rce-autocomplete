@@ -19,7 +19,7 @@ async def complete_text(request: CompletionRequest):
     result = await llm_service.complete_text(
         content_up_until_cursor=request.content_up_until_cursor,
         all_content_in_rce=request.all_content_in_rce,
-        max_tokens=request.max_tokens,
+        max_tokens=1000,
         temperature=request.temperature,
         stream=request.stream,
         provider=request.provider,
